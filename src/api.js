@@ -2,12 +2,14 @@ const express = require("express");
 const dotenv = require("dotenv");
 const mongoose=require('mongoose');
 const serverless = require("serverless-http");
+const cors = require('cors');
 const File = require('./Models/fileModel');
 const Folder = require('./Models/folderModel');
 const app = express();
 const router = express.Router();
 dotenv.config();
 
+app.use(cors());
 app.use(express.json())
 mongoose
   .connect(process.env.DATABASE)
