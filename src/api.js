@@ -54,9 +54,9 @@ router.post("/createfolder",async (req, res) => {
 
   router.post("/createfile", async (req, res) => {
       try{
-        const {name,folder,data}=req.body;
+        const {name,folder,data,path}=req.body;
         await File.create({
-          name,folder  ,path
+          name,folder  ,path,data
         })    
         res.status(201).json({
           succuss: "true"
