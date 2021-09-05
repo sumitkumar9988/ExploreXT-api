@@ -1,41 +1,44 @@
 const express = require("express");
+const dotenv = require("dotenv");
+const mongoose=require('mongoose');
 const serverless = require("serverless-http");
-import File from './Models/fileModel';
-import Folder from './Models/folderModel';
+const File = require('./Models/fileModel');
+const Folder = require('./Models/folderModel');
 const app = express();
 const router = express.Router();
+dotenv.config();
 
-router.get("/", (req, res) => {
+app.use(express.json())
+mongoose
+  .connect(process.env.DATABASE)
+  .then(() => console.log("DB connection successful!"))
+  .catch((err) => console.log(err));
+
+router.get("/",async (req, res) => {
   res.json({
     succuss: "yup!!!"
   });
 });
 
-router.post("/unlock", (req, res) => {
-    try{
-      const {code}=req.body;
-      if(code==='0000')  {
-        res.json({
-            succuss: "true"
-          });
-      }   
-     
-    }catch(err){
-      res.status(404).json({
-          succuss: "fail",
-          message:err
-        });
-    }
-  
+router.post("/unlock",async (req, res) => {
+      const code=req.body.code;
+      if(code=="1111"){
+         return res.status(201).json({
+              "succuss":true
+          })
+      }
+      return res.status(201).json({
+        "succuss":false
+    })
 });
 
-router.post("/createfolder", (req, res) => {
+router.post("/createfolder",async (req, res) => {
     try{
       const {name,folder}=req.body;
       await Folder.create({
         name,folder  
       })     
-      res.json({
+      res.status(201).json({
         succuss: "true"
       });
     }catch(err){
@@ -47,13 +50,13 @@ router.post("/createfolder", (req, res) => {
   
 });
 
-  router.post("/createfile", (req, res) => {
+  router.post("/createfile", async (req, res) => {
       try{
         const {name,folder,data}=req.body;
         await File.create({
           name,folder  
         })    
-        res.json({
+        res.status(201).json({
           succuss: "true"
         });
       }catch(err){
@@ -65,10 +68,10 @@ router.post("/createfolder", (req, res) => {
     
   });
 
-  router.get("/file", (req, res) => {
+  router.get("/file",async (req, res) => {
     try{
         const file=await File.find({}).populate('folder');
-      res.json({
+      res.status(201).json({
         succuss: "true",
         file:file
       });
@@ -79,12 +82,12 @@ router.post("/createfolder", (req, res) => {
         });
     }})
 
-    router.get("/file/:id", (req, res) => {
+    router.get("/file/:id",async (req, res) => {
         const id=req.params.id;
         try{
     
             const file=await File.findById(id).populate('folder');
-            res.json({
+            res.status(201).json({
               succuss: "true",
               file:file
             });
@@ -96,11 +99,11 @@ router.post("/createfolder", (req, res) => {
         }
 });
 
-router.get("/folder", (req, res) => {
+router.get("/folder",async (req, res) => {
   
     try{
         const folder=await Folder.find({}).populate('file folder');
-        res.json({
+        res.status(201).json({
           succuss: "true",
           folder:folder
         });
@@ -113,11 +116,11 @@ router.get("/folder", (req, res) => {
     }
 });
 
-router.get("/folder/:id", (req, res) => {
+router.get("/folder/:id",async (req, res) => {
     const id=req.params.id;
     try{
         const folder=await Folder.findById(id).populate('file');
-        res.json({
+        res.status(201).json({
           succuss: "true",
           folder:folder
         });
