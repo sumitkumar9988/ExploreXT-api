@@ -34,9 +34,9 @@ router.post("/unlock",async (req, res) => {
 
 router.post("/createfolder",async (req, res) => {
     try{
-      const {name,folder}=req.body;
+      const {name,folder,path}=req.body;
       await Folder.create({
-        name,folder  
+        name,folder  ,path
       })     
       res.status(201).json({
         succuss: "true"
@@ -54,7 +54,7 @@ router.post("/createfolder",async (req, res) => {
       try{
         const {name,folder,data}=req.body;
         await File.create({
-          name,folder  
+          name,folder  ,path
         })    
         res.status(201).json({
           succuss: "true"

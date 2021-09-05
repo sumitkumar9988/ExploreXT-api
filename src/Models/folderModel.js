@@ -8,6 +8,9 @@ const folderSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: "Folder",
       },
+      path:{
+          type:String
+      },
     file:[{
         type: mongoose.Schema.ObjectId,
         ref: "File",

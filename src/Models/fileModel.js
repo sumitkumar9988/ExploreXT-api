@@ -4,6 +4,9 @@ const fileModel = new mongoose.Schema({
         name:{
             type:String
         },
+        path:{
+            type:String
+        },
         folder:{
             type: mongoose.Schema.ObjectId,
             ref: "Folder",
